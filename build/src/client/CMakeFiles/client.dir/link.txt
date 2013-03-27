@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -Wno-deprecated -DHAVE_NETINET_IN_H -g    CMakeFiles/client.dir/work_thread.cpp.o CMakeFiles/client.dir/client.cpp.o  -o client -rdynamic -lthrift -llog4cplus -lboost_thread -lclassad 

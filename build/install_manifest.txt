@@ -1,0 +1,2 @@
+/home/zaleilynn/workspace/lynn-app/bin/master
+/home/zaleilynn/workspace/lynn-app/bin/worker

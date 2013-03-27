@@ -1,0 +1,2 @@
+/home/zaleilynn/workspace/lynn-app/build/src/master/CMakeFiles/master.dir
+/home/zaleilynn/workspace/lynn-app/build/src/worker/CMakeFiles/worker.dir
