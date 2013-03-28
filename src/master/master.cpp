@@ -21,7 +21,7 @@ using std::string;
 using boost::thread;
 
 DEFINE_int32(port, 9999, "master rpc port");
-DEFINE_string(pattern, "pattern1", "request pattern");
+DEFINE_string(pattern, "/root/pattern1", "request pattern file");
 
 extern void* SchedulerProcessor();
 
@@ -38,26 +38,13 @@ int main(int argc, char ** argv){
     Logger logger = Logger::getInstance(LOG4CPLUS_TEXT("master"));
     logger.addAppender(append);
     logger.setLogLevel(log4cplus::INFO_LOG_LEVEL);
-
-    char *p = getenv("LYNN_APP_HOME");
-    if( NULL == p) {
-        LOG4CPLUS_ERROR(logger, "LYNN_APP_HOME is not set");
-        return 1;
-    }
-
-    string lynn_app_home(p);
-
-    string conf_file = lynn_app_home + "/conf/" + FLAGS_pattern;
   
-    if(RequestI::Instance()->Init(conf_file) != 0) {
+    if(RequestI::Instance()->Init(FLAGS_pattern) != 0) {
         LOG4CPLUS_ERROR(logger, "cannot init request sender");
         return 1;
     }
 
     thread scheduler_processor_t(SchedulerProcessor);
-    //下面等有机器了再启动
-    //thread request_generator_t(RequestGenerator);
-    //RequestI::Instance()->Start(); 
 
     Rpc<MasterService, MasterProcessor>::Listen(FLAGS_port);
     return 0;
