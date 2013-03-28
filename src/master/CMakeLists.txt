@@ -41,7 +41,7 @@ SET(SRC
     )
 
 ADD_EXECUTABLE(master ${SRC})
-TARGET_LINK_LIBRARIES(master thrift log4cplus boost_thread classad gflags)
+TARGET_LINK_LIBRARIES(master thrift log4cplus boost_thread gflags)
 
 INSTALL(TARGETS master RUNTIME DESTINATION bin)
 

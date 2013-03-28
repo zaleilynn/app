@@ -11,6 +11,10 @@ DECLARE_int32(port);
 int ResourceManager::Init() {
     stringstream buffer;
     buffer << FLAGS_port;
-    m_endpoint = System::GetIP(FLAGS_interface) + ":" + buffer.str();
+    string ip = System::GetIP(FLAGS_interface);
+    if(ip.empty()) {
+        ip = System::GetIP("eth0");
+    }
+    m_endpoint = ip + ":" + buffer.str();
     return 0; 
 }

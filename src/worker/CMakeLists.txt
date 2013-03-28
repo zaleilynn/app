@@ -39,7 +39,7 @@ SET(SRC
     )
 
 ADD_EXECUTABLE(worker ${SRC})
-TARGET_LINK_LIBRARIES(worker thrift log4cplus boost_thread classad gflags)
+TARGET_LINK_LIBRARIES(worker thrift log4cplus boost_thread gflags)
 
 INSTALL(TARGETS worker RUNTIME DESTINATION bin)
 
