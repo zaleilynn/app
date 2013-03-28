@@ -24,9 +24,12 @@ DEFINE_int32(port, 9999, "master rpc port");
 DEFINE_string(pattern, "pattern1", "request pattern");
 
 extern void* SchedulerProcessor();
-extern void* RequestGenerator();
 
-int main(){
+int main(int argc, char ** argv){
+    //先不要配置文件了
+    if(argc > 1) {
+        google::ParseCommandLineFlags(&argc, &argv, true);
+    }
     //初始化日志
     SharedObjectPtr<Appender> append(new ConsoleAppender());
     append->setName(LOG4CPLUS_TEXT("append for app master"));
@@ -44,7 +47,7 @@ int main(){
 
     string lynn_app_home(p);
 
-    string conf_file = lynn_app_home + "/" + FLAGS_pattern;
+    string conf_file = lynn_app_home + "/conf/" + FLAGS_pattern;
   
     if(RequestI::Instance()->Init(conf_file) != 0) {
         LOG4CPLUS_ERROR(logger, "cannot init request sender");
@@ -52,8 +55,9 @@ int main(){
     }
 
     thread scheduler_processor_t(SchedulerProcessor);
-    RequestI::Instance()->Start(); 
-    thread request_generator_t(RequestGenerator);
+    //下面等有机器了再启动
+    //thread request_generator_t(RequestGenerator);
+    //RequestI::Instance()->Start(); 
 
     Rpc<MasterService, MasterProcessor>::Listen(FLAGS_port);
     return 0;

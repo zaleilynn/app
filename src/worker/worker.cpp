@@ -27,7 +27,13 @@ DEFINE_string(interface, "br0", "interface for communicating");
 
 extern void* SchedulerProcessor();
 
-int main(){
+int main(int argc, char ** argv){
+    //先不要配置文件了
+    if(argc > 1) {
+        google::ParseCommandLineFlags(&argc, &argv, true);
+    }
+    
+
     //初始化日志
     SharedObjectPtr<Appender> append(new ConsoleAppender());
     append->setName(LOG4CPLUS_TEXT("append for app worker"));
@@ -54,7 +60,6 @@ int main(){
 
     thread scheduler_processor_t(SchedulerProcessor);
  
-    //做成参数可以配置的
     Rpc<WorkerService, WorkerProcessor>::Listen(FLAGS_port);
     return 0;
 }

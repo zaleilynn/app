@@ -24,8 +24,18 @@ int Request::Init(const string& pattern){
         return 1;
     }
     int tmp;
-    for(int i = 0; i <= 24; i++) {
+    file >> tmp;
+    LOG4CPLUS_INFO(logger, "set rate to " << tmp);
+    //设置第一个值
+    m_cur_rate = tmp;
+
+    while(!file.eof()) {
         file >> tmp;
+        //防止重复读最后一个数据
+        if(file.fail()) {
+            break;
+        }
+        //除第一个值，其余的存起来
         m_pattern.push_back(tmp);
     }
     return 0;
@@ -35,9 +45,14 @@ int Request::Init(const string& pattern){
 void Request::Entry(){
     for(vector<int>::iterator it =  m_pattern.begin(); it != m_pattern.end(); it++) {
         //按照pattern每一分钟修改一次速率
-        sleep(60);
+        sleep(1);
+        LOG4CPLUS_INFO(logger, "set rate to " << *it); 
         SetRate(*it);
     }
+    sleep(1);
+    //模拟结束了
+    SetRate(0);
+    LOG4CPLUS_INFO(logger, "requset thread ends");
 }
 
 void Request::SetRate(int rate) {
@@ -62,6 +77,9 @@ void Request::Start(){
 }
 
 float Request::GetPoissonValue(float r) {
+    if(r == 0) {
+        return 0;
+    }
     float randpr = (float)rand()/RAND_MAX;
     return -(1/r) * (float)log(1-randpr);
 }

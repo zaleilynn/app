@@ -9,18 +9,43 @@
 #include "master/request.h"
 
 using log4cplus::Logger;
+using boost::thread;
 
 static Logger logger = Logger::getInstance("master");
+
+void* RequestGenerator() {
+    while(true) {
+        float interval = RequestI::Instance()->GetInterval();
+        if(interval == 0) {
+            LOG4CPLUS_INFO(logger, "request thread ends");
+            break;
+        }
+        LOG4CPLUS_INFO(logger, "interval " << interval);
+        usleep(1000000 * interval);
+        TaskInfo info;
+        //混合型应用 
+        info.app = "mixed";
+        //LOG4CPLUS_INFO(logger, "a new task interval:" << interval);
+        TaskPtr task(new Task(info));
+        //防止请求太快来不及处理
+        TaskBufferI::Instance()->PushBack(task);
+    }
+    return NULL;
+}
+
 
 void* SchedulerProcessor() {
     while(true) {
         vector<string> machines = MachinePoolI::Instance()->GetAllMachineEndpoint();
         if(machines.size() == 0) {
             //没有机器,不能一直查询
-            LOG4CPLUS_INFO(logger, "no machine right now...");
+            //LOG4CPLUS_INFO(logger, "no machine right now...");
             sleep(1);
         } else {
-            
+            //有机器再启动线程 
+            thread request_generator_t(RequestGenerator);
+            RequestI::Instance()->Start();
+ 
             for(vector<string>::iterator it = machines.begin(); it != machines.end(); it++) {
                 TaskPtr task;
                 TaskBufferI::Instance()->PopFront(&task);
@@ -33,21 +58,6 @@ void* SchedulerProcessor() {
                 }
             }
         } 
-    }
-    return NULL;
-}
-
-void* RequestGenerator() {
-    while(true) {
-        float interval = RequestI::Instance()->GetInterval();
-        usleep(1000000 * interval);
-        TaskInfo info;
-        //混合型应用 
-        info.app = "mixed";
-        //LOG4CPLUS_INFO(logger, "a new task interval:" << interval);
-        TaskPtr task(new Task(info)); 
-        //防止请求太快来不及处理
-        TaskBufferI::Instance()->PushBack(task);
     }
     return NULL;
 }
