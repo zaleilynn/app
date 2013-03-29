@@ -20,7 +20,7 @@ using std::auto_ptr;
 using std::string;
 using boost::thread;
 
-DEFINE_int32(port, 9999, "master rpc port");
+DEFINE_int32(port, 10000, "master rpc port");
 DEFINE_string(pattern, "/root/pattern1", "request pattern file");
 
 extern void* SchedulerProcessor();

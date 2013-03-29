@@ -1,2 +1,2 @@
-/usr/local/bin/master
-/usr/local/bin/worker
+/home/zaleilynn/workspace/lynn-app/bin/master
+/home/zaleilynn/workspace/lynn-app/bin/worker

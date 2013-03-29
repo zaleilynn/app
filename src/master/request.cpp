@@ -45,8 +45,8 @@ int Request::Init(const string& pattern){
 void Request::Entry(){
     for(vector<int>::iterator it =  m_pattern.begin(); it != m_pattern.end(); it++) {
         //按照pattern每一分钟修改一次速率
-        sleep(1);
-        LOG4CPLUS_INFO(logger, "set rate to " << *it); 
+        sleep(60);
+        //LOG4CPLUS_INFO(logger, "set rate to " << *it); 
         SetRate(*it);
     }
     sleep(1);

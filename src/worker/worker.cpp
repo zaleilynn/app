@@ -21,8 +21,8 @@ using std::auto_ptr;
 using std::string;
 using boost::thread;
 
-DEFINE_int32(port, 9998, "worker rpc port");
-DEFINE_string(master_endpoint, "127.0.0.1:9999", "master rpc endpoint");
+DEFINE_int32(port, 10001, "worker rpc port");
+DEFINE_string(master_endpoint, "127.0.0.1:10000", "master rpc endpoint");
 DEFINE_string(interface, "br0", "interface for communicating");
 
 extern void* SchedulerProcessor();
